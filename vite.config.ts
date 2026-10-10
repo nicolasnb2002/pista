@@ -145,7 +145,12 @@ function authPopupPlugin(): Plugin {
 // `0.0.0.0:8080` is the live-preview contract — don't change host/port.
 // The dev server starts once `src/router.tsx` and `src/routes/` exist — see
 // AGENTS.md § "First scaffold".
+// GitHub Pages (GITHUB_PAGES=1) is a static SPA at /pista/. The preview build
+// stays a server app and must not pick up that base path.
+const githubPages = process.env.GITHUB_PAGES === "1";
+
 export default defineConfig(({ command, isPreview }) => ({
+  base: githubPages ? "/pista/" : "/",
   server: {
     host: "0.0.0.0",
     port: 8080,
@@ -153,8 +158,8 @@ export default defineConfig(({ command, isPreview }) => ({
   },
   preview: {
     host: "127.0.0.1",
-    port: 8081,
-    strictPort: true,
+    port: githubPages ? 0 : 8081,
+    strictPort: !githubPages,
   },
   resolve: { tsconfigPaths: true },
   plugins: [
@@ -166,17 +171,29 @@ export default defineConfig(({ command, isPreview }) => ({
     // PWA head + ?install=1 tutorial page; runs before Start/Nitro.
     grokPwaPlugin(),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart(
+      githubPages
+        ? {
+            spa: {
+              enabled: true,
+              prerender: { outputPath: "/index", crawlLinks: false },
+            },
+            router: { basepath: "/pista" },
+          }
+        : {},
+    ),
     ...(command === "build" || isPreview
-      ? [
-          nitro({
-            preset: "vercel",
-            // Auto-registers server/middleware/* (the PWA install page +
-            // manifest + head-tag middleware). Nitro v3 defaults serverDir to
-            // false, so removing this silently unwires /?install=1 on deploys.
-            serverDir: "./server",
-          }),
-        ]
+      ? githubPages
+        ? []
+        : [
+            nitro({
+              preset: "vercel",
+              // Auto-registers server/middleware/* (the PWA install page +
+              // manifest + head-tag middleware). Nitro v3 defaults serverDir to
+              // false, so removing this silently unwires /?install=1 on deploys.
+              serverDir: "./server",
+            }),
+          ]
       : []),
     viteReact(),
   ],

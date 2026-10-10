@@ -4,9 +4,11 @@ Diez días de Python y bases de datos para llegar a [AI Engineering de ICARO](ht
 
 El curso arranca en modelos, prompts, RAG, agentes y APIs. Pista es lo de antes: tipos, control de flujo, listas y diccionarios, funciones, errores, JSON, SQL y el puente entre Python y una tabla.
 
+**Para estudiar:** [nicolasnb2002.github.io/pista](https://nicolasnb2002.github.io/pista/)
+
 Python corre en el navegador. SQL corre en SQLite, también en el navegador. No hay cuentas. El avance queda guardado en el navegador de quien estudia.
 
-## Cómo abrirla
+## Cómo abrirla en local
 
 ```bash
 npm install

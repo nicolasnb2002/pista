@@ -7,6 +7,8 @@ import appCss from "../styles.css?url";
 const FONT =
   "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap";
 
+const base = import.meta.env.BASE_URL;
+
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -21,13 +23,13 @@ export const Route = createRootRoute({
       { name: "theme-color", content: "#090b10" },
     ],
     links: [
-      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "icon", type: "image/svg+xml", href: `${base}favicon.svg` },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: FONT },
       { rel: "stylesheet", href: appCss },
-      { rel: "manifest", href: "/__grok/manifest.webmanifest" },
-      { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
+      { rel: "manifest", href: `${base}__grok/manifest.webmanifest` },
+      { rel: "apple-touch-icon", href: `${base}__grok/icon-180.png` },
     ],
   }),
   component: () => (
